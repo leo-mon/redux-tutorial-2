@@ -14,3 +14,7 @@ onClick() {}  //Standard styleではカッコの前にスペース入れる必�
 
 > やりすぎ感あるがひとまずこのまま進む
 
+## Supplying the Initial State
+あらかじめ初期値を外部から与えたい場合は`createStore()`の第二引数にオブジェクトを渡せば変更できる  
+ただこれを利用するとテストしづらく、またreducerを後で変更しづらくなってしまう  
+
