@@ -1,13 +1,13 @@
 const path = require('path')
 
-const config={
+const config = {
   entry: './src/index.js',  // 読み込みの起点
   output: {
     path: path.resolve(__dirname, '/dist'),  // 出力ディレクトリ
     filename: 'bundle.js'  // 出力ファイル名
   },
   module: {
-    rules:[
+    rules: [
       {  // Javascript Starndard設定
         enforce: 'pre',  // 最初に実行
         test: /\.js$/,
@@ -16,8 +16,8 @@ const config={
           loader: 'standard-loader',
           options: {
             error: false,
-            snazzy: true,
-            //parser: 'babel-eslint'
+            snazzy: true
+            // parser: 'babel-eslint'
           }
         }
       },
@@ -33,7 +33,7 @@ const config={
   devtool: 'inline-source-map',  // デバッグ用にソースマップ追加
   devServer: {  // webpack-dev-serverの設定
     contentBase: './dist',
-    port: 3000,
+    port: 3000
   }
 }
 

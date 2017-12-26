@@ -20,25 +20,17 @@ const getVisibleTodos = (
   }
 }
 
-const mapStateToProps = (  // ファイル分割してmapStateToPropsのままの方が望ましい
-  state
-) => {
-  return {
-    todos: getVisibleTodos(
-      state.todos,
-      state.visibilityFilter
-    )
+const mapStateToProps = (state) => ({
+  todos: getVisibleTodos(
+    state.todos,
+    state.visibilityFilter
+  )
+})
+const mapDispatchToProps = (dispatch) => ({
+  onTodoClick (id) {
+    dispatch(toggleTodo(id))
   }
-}
-const mapDispatchToProps = (
-  dispatch
-) => {
-  return {
-    onTodoClick: (id) => {
-      dispatch(toggleTodo(id))
-    }
-  }
-}
+})
 const VisibleTodoList = connect(  // connectを利用してstoreとのやりとり
   mapStateToProps,  // TodoListへ注入するStateを返す関数
   mapDispatchToProps  // TodoListへ注入するdispatcherを返す関数
