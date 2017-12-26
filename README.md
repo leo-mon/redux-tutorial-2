@@ -18,7 +18,8 @@ yarn add\
 ```
 yarn add\
   react react-dom\
-  redux react-redux
+  redux react-redux\
+  node-uuid lodash
 ```
 
 ### 設定ファイル

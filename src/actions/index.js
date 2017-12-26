@@ -1,9 +1,10 @@
+import { v4 } from 'node-uuid'
+
 // Action Creators
 
-let nextTodoId = 0  // action.idに利用するグローバル変数
 export const addTodo = (text) => ({  // acton creator, dispatchされるアクションを返す
   type: 'ADD_TODO',
-  id: (nextTodoId++).toString(),
+  id: v4(),
   text
 })
 
