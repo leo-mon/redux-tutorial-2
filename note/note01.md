@@ -33,3 +33,13 @@ stateをシリアライズできないと`stringify`はできないが、Redux�
 また頻繁にシリアライズするのはコストが高いのでスロットリングをかける  
 1秒に1回だけローカルストアに書き込み権限をつける
 
+## Persisting the State to the Local Storage
+Storeの作成とPersistaneロジックの部分を外だし
+
+storeをExportするのではなくconfigureStore()のようにstoreを返す関数を返すことで、テストの際に複数のStoreを作成できるようになる
+
+またpropsをstoreから受けとるコンポーネントを`<Root />`として分離
+
+> modelと、Containerと、エントリーポイント（controllerっぽい？）の分離
+
+Rootは一見シンプルだがこのあと色々追加していく
