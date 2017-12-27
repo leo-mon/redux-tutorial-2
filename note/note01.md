@@ -43,3 +43,11 @@ storeをExportするのではなくconfigureStore()のようにstoreを返す関
 > modelと、Containerと、エントリーポイント（controllerっぽい？）の分離
 
 Rootは一見シンプルだがこのあと色々追加していく
+
+
+## Adding React Router to the Project
+ルーティングをSPAでも行うためにreact-routerを導入
+`Router`と`Route`コンポーネントをRoot.js に追加
+<App />を<Router />に変更、これを<Provider />の下に置き続けることでStoreの情報が伝わっていく
+> チュートリアルはv3以前っぽいのでv4でやってみよう
+> v3だとbrowserHistoryを導入しないと各リンクに自動でハッシュが振られる模様

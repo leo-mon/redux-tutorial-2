@@ -19,6 +19,7 @@ yarn add\
 yarn add\
   react react-dom\
   redux react-redux\
+  react-router-dom\
   node-uuid lodash
 ```
 
