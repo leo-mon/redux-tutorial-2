@@ -51,3 +51,26 @@ Rootは一見シンプルだがこのあと色々追加していく
 <App />を<Router />に変更、これを<Provider />の下に置き続けることでStoreの情報が伝わっていく
 > チュートリアルはv3以前っぽいのでv4でやってみよう
 > v3だとbrowserHistoryを導入しないと各リンクに自動でハッシュが振られる模様
+
+
+## Navigating with React Router <Link>
+アドレスの変化を実装すし、ブラウザバックなどに対応させる
+
+`Route`にpropsとしてpathとcomponentを与える  
+pathには?をつけると、それがオプションであるという宣言になる
+
+> pathに与えたものと合致するpropsがcomponentにあると、その状態にアドレスが対応する模様
+
+activeとcompletedをアドレスバーに表示させるために、Footerからfilterとして与える名称を変更
+
+これまでの実装ではリンクがクリックされた時の挙動を定義するためにFilterLinkでStoreから注入していたが、routerにurlに関する状態は管理させる  
+そのため不要な部分を削って新しいコンポーネントを持ってくる  
+`NavLink`コンポーネントでリンクを作成、activeStyleでその状態がアクティブなときのスタイルを定義
+exactを指定すると正確にロケーションと一致している時でないとスタイルが適用されない
+> v4からはNavLinkにしないとスタイル指定ができない
+
+setVisibilityFilterのAction Createrはいらないので削除、Link.jsもいらないので削除
+
+> この段階でURLがリンクをクリックすると付与されるように
+> ただ対応する挙動が定義されてないので見た目は変化しない
+> webpack-dev-serverのデバッグモードだとリンク付与がされない？

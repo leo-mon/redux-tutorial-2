@@ -5,21 +5,15 @@ const Footer = () => (
   <p>
     Show:
     {' '}
-    <FilterLink
-      filter='SHOW_ALL'
-    >
+    <FilterLink filter='all'> {/* filterの値をルーティングに利用する */}
       All
     </FilterLink>
     {' '}
-    <FilterLink
-      filter='SHOW_ACTIVE'
-    >
+    <FilterLink filter='active'>
       Active
     </FilterLink>
     {' '}
-    <FilterLink
-      filter='SHOW_COMPLETED'
-    >
+    <FilterLink filter='completed'>
       Completed
     </FilterLink>
   </p>
