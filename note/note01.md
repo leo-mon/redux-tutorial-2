@@ -90,4 +90,9 @@ visibilityFilterなどいらないものの消去
 > jsxのコメント`{/*  */}`は Route直下だと前の要素との間にスペース挟むと怒られる模様
 
 
+## Using withRouter() to Inject the Params into Connected Components
+前節のままだとAppはfilterをVisibleTodosへ伝えるだけになっている  
 
+`withRoutere`でコンポーネントをつつむことで、そのコンポーネントに`match`などを注入できる
+
+こうすることで深い階層にも直接Routeからの情報を注入可能
