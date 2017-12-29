@@ -96,3 +96,23 @@ visibilityFilterなどいらないものの消去
 `withRoutere`でコンポーネントをつつむことで、そのコンポーネントに`match`などを注入できる
 
 こうすることで深い階層にも直接Routeからの情報を注入可能
+
+
+## Using mapDispatchToProps() Shorthand Notation
+VisibleTodoListの`mapDispatchToProps`はidを受け取り、idをキーにしてdispatchするように伝えている  
+このような場合コールバックと、Action Createrのオブジェクトのマッピングを渡すようにするだけの記載が可能
+
+
+##  Colocating Selectors with reducers
+VisibleTodoList 内の`getVisibleTodos`は、stateの一部をスライスしてtodosへと渡しているが、stateの構造に変化があった時にはこの関数も変更するよう覚えていないといけない  
+
+そのためreducerのファイルへと移動、reducerがtodosの構造を管理しているため  
+
+やることはとてもシンプルで、デフォルトのexportはreducerだが他にも`get`で始まる表示されるデータをひっぱる関数をおく。このような関数ををselectorと呼ぶ
+
+VisibleTodoList内部ではtodoをstateから取得しているため、まだstateの構造に依存している  
+ただ実際のtodoの読み取り関数は変更される可能性がある
+
+そのことを踏まえてreducerからgetVisibleTodosという名前でexportをする
+
+> 統一的にreducerのトップからやりとりする、という構造にしたという理解でいいんだろうか
