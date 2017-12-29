@@ -6,7 +6,7 @@ import App from './App'
 const Root = ({ store }) => (
   <Provider store={store}>
     <Router>
-      <Route path='/:filter?' component={App} /> {/* ?でfilterがない場合でもルーティング */}
+      <Route path='/:filter?' component={App} />{/* ?でfilterがない場合でもルーティング */}
     </Router>
   </Provider>
 )

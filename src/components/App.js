@@ -4,10 +4,12 @@ import AddTodo from '../containers/AddTodo'
 import VisibleTodoList from '../containers/VisibleTodoList'
 
 // Appコンポーネント
-const App = () => (
+const App = ({ match }) => (
   <div>
     <AddTodo />
-    <VisibleTodoList />
+    <VisibleTodoList
+      filter={match.params.filter || 'all'}
+    />
     <Footer />
   </div>
 )

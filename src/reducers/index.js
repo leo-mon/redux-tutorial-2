@@ -1,11 +1,9 @@
 import { combineReducers } from 'redux'
 import todos from './todos'
-import visibilityFilter from './visibilityFilter'
 
 // トップレベルのReducer
 const todoApp = combineReducers({
-  todos,
-  visibilityFilter
+  todos
 })
 
 export default todoApp

@@ -74,3 +74,20 @@ setVisibilityFilterのAction Createrはいらないので削除、Link.jsもい�
 > この段階でURLがリンクをクリックすると付与されるように
 > ただ対応する挙動が定義されてないので見た目は変化しない
 > webpack-dev-serverのデバッグモードだとリンク付与がされない？
+
+##  Filtering Redux State with React Router Params
+Storeからの値の注入にstate.visibilityfFilterを利用しているので見た目はまだ変化しない
+そのためRouterからの口としてownPropsで注入をおこなう
+
+AppはRouteから特殊なpropsである`match`を受け取るので、`match.params.filter`でURLからのパラメータを受け取って注入を行う
+
+> v4では`match`で受け取る模様
+
+visibilityFilterなどいらないものの消去
+
+また/activeなどへダイレクトで飛んだ時でもindex.htmlに誘導するようなルーティングをサーバーで行う必要あり
+
+> jsxのコメント`{/*  */}`は Route直下だと前の要素との間にスペース挟むと怒られる模様
+
+
+
