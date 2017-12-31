@@ -57,3 +57,10 @@ chromeのように`console.group()`をサポートしているブラウザを念
 `rawDispatch`と`returnValue`で生の関数を保持しておく
 
 環境変数でproductionの時は排除(Webpackでのプラグインの設定でできる模様)
+
+
+##  Adding a Fake Backend to the project
+
+フェイクAPIとのやりとりの実装（そのためlocalStorageに関するコードまわりは削除）
+
+> 動作サンプルをindex.jsに記載

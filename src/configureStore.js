@@ -1,7 +1,5 @@
 import { createStore } from 'redux'
-import throttle from 'lodash/throttle'
 import todoApp from './reducers'
-import { loadState, saveState } from './localStorage'
 
 // dispatchをオーバーライドしログを残すようにするメソッド
 const addLoggingToDispatch = (store) => {
@@ -22,18 +20,12 @@ const addLoggingToDispatch = (store) => {
 
 // Store周りの設定（初期値代入やDispatcherの登録、ローカルストレージへの保存）
 const configureStore = () => {
-  const persistedState = loadState()  // ローカルストレージから初期値を代入
-  const store = createStore(todoApp, persistedState)  // Reducer登録
+  const store = createStore(todoApp)  // Reducer登録
 
   if (process.env.NODE_ENV !== 'production') {  // プロダクション環境ではオーバーライド無効
     store.dispatch = addLoggingToDispatch(store)  // dispatch()をオーバーライド
   }
 
-  store.subscribe(throttle(() => {  // Storeが更新されたらStateをローカルに, 1秒に1回のみ
-    saveState({
-      todos: store.getState().todos  // 書き込むのはtodosのみ
-    })
-  }, 1000))
   return store
 }
 
