@@ -64,3 +64,24 @@ chromeのように`console.group()`をサポートしているブラウザを念
 フェイクAPIとのやりとりの実装（そのためlocalStorageに関するコードまわりは削除）
 
 > 動作サンプルをindex.jsに記載
+
+
+## Fetching Data on Route Change
+VisibleTodoにフェイクAPIからの値取得を入れる  
+値代入にライフサイクルでのフックを入れるためにclassとして宣言、propsはTodoListへ全部つっこむ
+
+VisibleTodoListをクラスとして宣言したので同じ名前のconstは宣言できない、ので再代入によってwithRouterとconnectを入れる
+
+> ここStandardだとエラー吐かれる、とりあえず無視して進む
+
+filterのpropsがあると便利なのでmapStateToPropsで注入する
+
+これをcomponentDidMount()でマウントの前に引っ掛ける
+
+ただしこれだけだとfilterの値を変更しても反映されない、componentDidMountは最初の一回しか実行されないため
+
+これを解消するのにcomponentDidUpdateを利用する  
+componentDidUpdateはアップデート前のpropsを受け取るのでそれと比較し、違うようであればfetchTodosを走らせるようにする
+
+> Viewにはこのタイミングで反映は入れていない
+
