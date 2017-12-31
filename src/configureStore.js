@@ -12,7 +12,7 @@ const configureStore = () => {
       todos: store.getState().todos  // 書き込むのはtodosのみ
     })
   }, 1000))
-
+  console.log(store.getState())
   return store
 }
 
