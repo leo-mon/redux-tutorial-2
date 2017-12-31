@@ -47,3 +47,13 @@ combineReducersを各階層で利用しても問題なし
 > combineReducerで束ねた名称が`key`になってその下にstateが入ってくる感じになる（ので気にせず`state`として値を引っ張っていい模様）
 > なぜこうしたかはきっとそのうち説明があるんだろう
 
+## Wrapping dispatch() to Log Actions
+
+stateの形状が複雑になってきたので、store.dispatch関数をオーバーライドしログを追加
+
+chromeのように`console.group()`をサポートしているブラウザを念頭に`actiion.type`でグルーピング  
+前段のstateをdispatch前に取得しておくことで差分をみる
+
+`rawDispatch`と`returnValue`で生の関数を保持しておく
+
+環境変数でproductionの時は排除(Webpackでのプラグインの設定でできる模様)
