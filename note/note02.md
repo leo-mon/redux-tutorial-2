@@ -85,3 +85,19 @@ componentDidUpdateはアップデート前のpropsを受け取るのでそれと
 
 > Viewにはこのタイミングで反映は入れていない
 
+
+## Dispatching Actions with the Fetched Data
+
+DidMountとDidUpdateでのコードの共通化できる部分を`fetchData`とする
+
+取得してきたデータをStoreのstateに取り込むにはactionをdispatchするしかない（Reduxでは）  
+callback prop としてreceiveTodoを用いることとする  
+コンポーネント内でこれを用いるためにreceiveTodoを渡さなければならないが、それにはaction createrを作成して`connect`の第二引数に渡す
+
+action createrはフェイクサーバーのレスポンスに加えてfilterをつけてreducerへと渡す
+
+fetchDataではfilterをすぐに引っ張り出しておく、というのもコールバックが発火するとthis.props.filterは変化してしまうかもしれないから  
+
+named importも修正可能、actionsと名付けて丸っとmapDispatchToPropsとして渡してしまう
+
+TodoListについてはonTodoClickの名前でactionが渡される必要があるが、他はそのまま渡す
