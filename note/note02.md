@@ -101,3 +101,23 @@ fetchDataではfilterをすぐに引っ張り出しておく、というのも�
 named importも修正可能、actionsと名付けて丸っとmapDispatchToPropsとして渡してしまう
 
 TodoListについてはonTodoClickの名前でactionが渡される必要があるが、他はそのまま渡す
+
+
+## Wrapping dispatch() to Recognize Promises
+receiveTodosは少し不便  
+fetchTodosとreceiveTodosは同じ同じ引数をとるので、ひとつのaction createrにまとめることができる  
+
+非同期のaction creater, fetchTodosを加える  
+receiveTodosが同期的にアクションオブジェクトを返却する一方でfetchTodosがPromiseを返してアクションオブジェクトを解決する
+
+コンテナの方  
+connectでactionは注入されるのでPropsから拾う
+
+fetchTodosのAction CreaterがAPIからfetchTodoを呼んで、receiveTodoでReduxのアクションが実行　　
+しかしデフォルトではReduxはPromiseを受け付けない  
+オーバーライドして受け取れるようにする必要がる
+
+actionが本物のactionなのかPromiseなのかわからないので、thenメソッドがあってそれが関数なのかチェック、あればPromiseなのでresolveされるまで待ってrawDispatchへと渡すようにする
+
+オーバーライドの順番は重要
+PromiseSupportを先に書いてしまうと、actionは最初にログを吐いた後にPromiseが解決されてしまうため、type:undefindが並んでしまう

@@ -18,6 +18,17 @@ const addLoggingToDispatch = (store) => {
   }
 }
 
+// dispatchをオーバライドしてPromiseを受け取れるようにする関数
+const addPromiseSupportToDispatch = (store) => {
+  const rawDispatch = store.dispatch
+  return (action) => {
+    if (typeof action.then === 'function') {
+      return action.then(rawDispatch)
+    }
+    return rawDispatch(action)
+  }
+}
+
 // Store周りの設定（初期値代入やDispatcherの登録、ローカルストレージへの保存）
 const configureStore = () => {
   const store = createStore(todoApp)  // Reducer登録
@@ -25,6 +36,8 @@ const configureStore = () => {
   if (process.env.NODE_ENV !== 'production') {  // プロダクション環境ではオーバーライド無効
     store.dispatch = addLoggingToDispatch(store)  // dispatch()をオーバーライド
   }
+
+  store.dispatch = addPromiseSupportToDispatch(store)  // dispatch()をオーバーライド
 
   return store
 }
