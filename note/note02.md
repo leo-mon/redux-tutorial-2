@@ -155,3 +155,18 @@ curried styleの関数はアロー関数のチェーンで書ける
 またmiddlewareについてはdispatchのオーバーライドの順序で書いていたが、より自然にactionがmiddlewareを通る順で書けるようにreverseする
 
 
+## Applying Redux Middleware
+
+前節のように`wrapDispatchWithMiddlewares`を自前実装しつづけるのはしんどい  
+代わりに`applyMiddleware`をReduxからimportする  
+
+createStoreはmiddlewareの適用直前に呼び出せばいい  
+wrapDispatchWithMiddlewaresも削除、createStore中にapplyMiddlewareを入れる
+
+`promise`も`logger`もnpmパッケージで配布されているものを利用可能
+redux-promiseとredux-loggerを追加 
+
+applyMiddlewareをはenhancerと呼ばれる  
+もしpersistStoreを入れたい場合はenhancerの前の引数に入れる
+
+> 今更`historyApiFallback`をwebpack.config.jsへ追加、Filtering Redux State with React Router Paramsでやっておくべき設定

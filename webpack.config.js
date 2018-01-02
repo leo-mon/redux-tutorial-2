@@ -33,7 +33,8 @@ const config = {
   devtool: 'inline-source-map',  // デバッグ用にソースマップ追加
   devServer: {  // webpack-dev-serverの設定
     contentBase: './dist',
-    port: 3000
+    port: 3000,
+    historyApiFallback: true
   }
 }
 
