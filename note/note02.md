@@ -170,3 +170,31 @@ applyMiddlewareをはenhancerと呼ばれる
 もしpersistStoreを入れたい場合はenhancerの前の引数に入れる
 
 > 今更`historyApiFallback`をwebpack.config.jsへ追加、Filtering Redux State with React Router Paramsでやっておくべき設定
+
+
+## Updating the State with the Fetched Data
+`todos.js`中の`getVisibleTodos`は全てがメモリで動作しているという前提でインプリされていた   
+
+これは全てのデータがサーバーから送信されてクライアントに揃っている状態でのみ動作するため、何かを取得してくるアプリケーションには適さない
+
+ 巨大なidのリストを保持するよりも、フィルタごとにidを分割して、データ取得のタイミングで埋める形にする  
+state.allIdsの代わりにstate.IdsByFilterで対応するidのリストを取得する形にして、それをmapしbyIdで実際にtodosを取得する形にする
+
+idsByFilterはallIds, activeIds, completedIdsnの3つのreducerを束ねて作る
+
+allIdsはもともとIDのアレイとADD_TODO actionの管理を行なっていた  
+サーバーから得たデータに対応させるため、ADD_TODOをRECEIVE_TODOに変更、それに対応させるためにresponseのidをそれぞれ返却するようにmap  
+allIdsとactiveIs, completedIdsは別々であり、お互い完全に非依存で呼び出されるようにする
+
+activeIdsはidのarrayであるという点では同じでが、todoがactiveなものだけ格納しておく
+
+activeIdsもallIdsも、'RECEIVE_TODOS'が発火したら新しい状態を返してくれるが、どちらのアレイをアップデートすればい良いのかを伝える方法を作る必要がある  
+RECEIVE_TODOをコールするとき一緒にfilterも渡しているのでそれを利用, completedも同様に作成
+
+ローカルにデータはない（という体）ので、ADD_TODOもTOGGLE_TODOも削除してRECEIVE_TODOを処理するようにする
+
+nextStateをstateの浅いコピーとして作成、その内容をresponseの内容に更新してnextStateを返す
+
+通常代入はimmutableでないが、この場合はShallow copyした者への代入なので大丈夫
+
+ゴミ削除
