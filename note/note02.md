@@ -121,3 +121,37 @@ actionが本物のactionなのかPromiseなのかわからないので、thenメ
 
 オーバーライドの順番は重要
 PromiseSupportを先に書いてしまうと、actionは最初にログを吐いた後にPromiseが解決されてしまうため、type:undefindが並んでしまう
+
+## The Middleware Chain
+`store.dispatch` は `addLoggingToDispatch`によってオーバーライドされているので、`addPromiseSupportToDispatch`内で`rawDispatch`という名前で保持しているのは正確ではないので`next`という名前にする  
+
+> なんなのこのこだわり
+
+合わせて  addLoggingToDispatchもnextに変更、これが一番最初にオーバーライドする関数とは限らないため？
+
+これらのような公式の関数のオーバーライドはうまくいっているうちはいいがいい方法ではない  
+middleware functionのアレイを宣言することでこのパターンをやめることができる
+
+`wrapDispatchWithMiddlewares`を宣言、第一引数にstore、第二引数にmiddleware functions array
+このarayでforeachを走らせそれぞれを実行する（store.dispatchにそれぞれのmiddlewareを走らせる）  
+これらmiddleware関数にはパターンがある、store.dispatchの値を保持して、nextとした変数へと格納する  
+
+middlewareの仕様としてnextは外部の引数として入れることができる
+
+> このためのnextだった模様
+
+この変更によりmiddlewareは関数を返す関数を返す関数になる  
+このパターンをcurringと呼ぶ、Javascriptではあまり見かけないが関数型プログラミングではよく使われるパターン
+
+next middlewareをstoreから取得するよりも、injectableにすることで、middlewareを呼ぶ関数がどのmiddlewareをコールするか選択できるようになる
+
+storeだけでなくnext middlewareも注入されるようにする必要がある  
+middlewareはstore.dispatchの前の値になる  
+
+middlewareはファーストクラスのコンセプトなので、addLoggingToDispatchをlog、addPromiseSupportToDispatchをpromiseに名称変更
+
+curried styleの関数はアロー関数のチェーンで書ける
+
+またmiddlewareについてはdispatchのオーバーライドの順序で書いていたが、より自然にactionがmiddlewareを通る順で書けるようにreverseする
+
+
