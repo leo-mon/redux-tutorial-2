@@ -198,3 +198,22 @@ nextStateをstateの浅いコピーとして作成、その内容をresponseの�
 通常代入はimmutableでないが、この場合はShallow copyした者への代入なので大丈夫
 
 ゴミ削除
+
+最初スイッチするときは描画に時間がかかるが、その後は瞬時に切り替わる、というのも状態がすでにキャッシュされており、背後でfetchが走っていても前後で状態が変わらないため再レンダリングが走らない
+
+
+## Refactoring the Reducers
+先だってvisiblityFilterを削除したため、index.jsを消去しtodo.jsをindex.jsヘリネームし昇格  
+
+byIdを外だし（byId.js）、セレクタとしてgetTodo()を追加
+
+
+IDを扱うreducer(allIds, activeIds, completedIds)は同じような形なのでcreateListを作成し共通化 　
+createListも外だし
+セレクタとしてgetIdを追加、これはそのうち変更
+
+idByfilterをリネーム、listByFilterに（listとして外だししているから）
+
+getVisibleTodosを修正、セレクタを用いてTodoを取得
+アクセス用のセレクタは必ずしも必要ではないが良い方法  
+これら修正によって、どのreducerのstateの形状も、あちこち変更せずによくなる

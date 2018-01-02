@@ -11,7 +11,7 @@ const configureStore = () => {
   }
 
   return createStore(
-    todoApp,
+    todoApp,  // ここtodoAppのままでもなんでも動く...
     applyMiddleware(...middlewares)
   )
 }
