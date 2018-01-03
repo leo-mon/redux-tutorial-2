@@ -22,3 +22,7 @@ export const getVisibleTodos = (state, filter) => {
   const ids = fromList.getIds(state.listByFilter[filter])   // そのフィルタに属するIDのアレイを取得
   return ids.map(id => fromById.getTodo(state.byId, id))  // IDのアレイから対応するTodoを取得・返却
 }
+
+// データ取得中かどうかを取得
+export const getIsFetching = (state, filter) =>
+  fromList.getIsFetching(state.listByFilter[filter])

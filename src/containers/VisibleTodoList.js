@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import * as actions from '../actions'
 import TodoList from '../components/TodoList'
-import { getVisibleTodos } from '../reducers'
+import { getVisibleTodos, getIsFetching } from '../reducers'
 
 class VisibleTodoList extends Component {
   componentDidMount () {
@@ -17,15 +17,20 @@ class VisibleTodoList extends Component {
   }
 
   fetchData () {  // Fake APIから値を取得しStoreへと書き込む
-    const { filter, fetchTodos } = this.props  // どちらもmapXXToPropsで注入済
-    fetchTodos(filter)
+    const { filter, requestTodos, fetchTodos } = this.props  // どちらもmapXXToPropsで注入済
+    requestTodos(filter)  // REQUEST_TODOSをdispatch
+    fetchTodos(filter)  // RECEIVE_TODOSをdispatch
   }
 
   render () {
-    const { toggleTodo, ...rest } = this.props
+    const { toggleTodo, todos, isFetching } = this.props
+    if (isFetching && !todos.length) {
+      return <p>Loading...</p>   // requestTodos実行時はこちらを表示
+    }
+
     return (
       <TodoList
-        {...rest}
+        todos={todos}
         onTodoClick={toggleTodo}  // これだけonTodoClickとのマッピングで渡す
       />
     )
@@ -36,6 +41,7 @@ const mapStateToProps = (state, { match }) => {
   const filter = match.params.filter || 'all'  // ライフサイクル利用のためfilter利用
   return {
     todos: getVisibleTodos(state, filter),
+    isFetching: getIsFetching(state, filter),
     filter
   }
 }
