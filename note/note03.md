@@ -27,3 +27,34 @@ fetchDataにrequestTodosを追加、これは（connectでmapDispatchToPropsと�
 > reducerを改定、セレクタを作成(createListに書いてそれをrootへと上げる)
 > actionを規定
 > 的な
+
+## Dispatching Actions Asynchronously with Thunks
+前節ではrequestTodosをfetchTodosの前に実行したが、これを自動で実行できればなお良い  
+
+最初にコンポーネントからdispatchされるrequestTodosを削除、exportする必要がなくなるのでexport削除（requestTodos自体は消さない）
+  
+目標はfetchをしたときrequestTodos()をdispatchし、fetchが終了したらreceiveTodos()をdispatchするが、、fetchTodos action createrは単にreceiveTodosのみを解決するようにすること  
+
+action のPromiseは完了するまでに一つのactionだけを解決するが、一連の実行の最中に複数のactionをdispatchできるようにしたい。これがPromiseを返すよりも、dispatchのcallback引数が入力される関数を返したい理由になる
+
+この変更により、非同期処理の実行中、いくつでもどのタイミングでもdispatchを行えるようになる。requestTodosを最初にdispatchし、Promiseが解決されたら明示的にreceiveTodosをdispatchできるようになる。
+
+この変更は記述量は多くなるがより柔軟な構成になる。Promiseは一つの非同期な値だけを扱えるため、fetchTodosはコールバック引数を持つ関数を返すようになり、非同期処理の間に何回も呼び出せるようになる  
+
+他の関数によって返される関数はthunksと呼ばれる、これをサポートするライブラリを導入する  
+
+configureStore.jsからredux-promiseを削除しthunk middlewareに置き換える
+thunk middlewareはthunksのdispatchを補助する。他のmiddlewareと同様、store, 次のmiddleware(next)、actionを引数に取る
+
+もしactionが関数だった場合、これはthunkで、注入されるべき関数を求めているものとする。この場合はstore.dispatchとともにactionを呼ぶ
+
+そうでない限り、単にactionの結果について次のmiddleware chainへ渡していく  
+
+
+> おぼろげな理解だが、
+> dispatchを引数にとるコールバック関数を書いてその中に非同期処理を書く、それをaction creatorとしておく
+> ※ exportされるaction createrは全てVisibleTodosにおけるconnectでstore.dispatch(action)できるようになっている
+> store.dispatch(callback_function)と命令が来たらcallback_funcitionの中身にstore.dispatchを渡してやるようにthunkがとりはからう
+> (これまでは{'TOGGLE_TODO', id}みたいなオブジェクトを引数として渡していたが関数で今回は渡す)
+> このためコールバック関数内で複数の処理を一括で実行可能、今回はrequestTodosとreceiveTodosが実行され、それぞれstore.dispatchに渡されて処理される
+> とりあえず先に進もう

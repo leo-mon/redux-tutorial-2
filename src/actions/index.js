@@ -14,7 +14,7 @@ export const toggleTodo = (id) => ({
   id
 })
 
-export const requestTodos = (filter) => ({
+const requestTodos = (filter) => ({
   type: 'REQUEST_TODOS',
   filter
 })
@@ -25,7 +25,10 @@ const receiveTodos = (filter, response) => ({
   response
 })
 
-export const fetchTodos = (filter) =>
-  api.fetchTodos(filter).then(response =>  // Promiseを返す
-    receiveTodos(filter, response)  // 解決されたらreceiveTodoを返してくる
-  )
+export const fetchTodos = (filter) => (dispatch) => {  // thunkによってstore.dispatchがdispatchには渡される
+  dispatch(requestTodos(filter))
+
+  return api.fetchTodos(filter).then(response => {
+    dispatch(receiveTodos(filter, response))  // 解決されたらreceiveTodoをdispatch
+  })
+}

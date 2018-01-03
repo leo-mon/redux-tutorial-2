@@ -17,8 +17,7 @@ class VisibleTodoList extends Component {
   }
 
   fetchData () {  // Fake APIから値を取得しStoreへと書き込む
-    const { filter, requestTodos, fetchTodos } = this.props  // どちらもmapXXToPropsで注入済
-    requestTodos(filter)  // REQUEST_TODOSをdispatch
+    const { filter, fetchTodos } = this.props
     fetchTodos(filter)  // RECEIVE_TODOSをdispatch
   }
 
