@@ -15,24 +15,31 @@ export const toggleTodo = (id) => ({
   id
 })
 
-const requestTodos = (filter) => ({
-  type: 'REQUEST_TODOS',
-  filter
-})
-
-const receiveTodos = (filter, response) => ({
-  type: 'RECEIVE_TODOS',
-  filter,
-  response
-})
-
 export const fetchTodos = (filter) => (dispatch, getState) => {  // thunkによってstore.dispatchがdispatchには渡される, getStateはredux-thunkが渡してくれる？
   if (getIsFetching(getState(), filter)) {  // fetch中はこちらに落ちる
     return Promise.resolve()  // thunkの返り値をPromiseにするため
   }
-  dispatch(requestTodos(filter))
-
-  return api.fetchTodos(filter).then(response => {
-    dispatch(receiveTodos(filter, response))  // 解決されたらreceiveTodoをdispatch
+  dispatch({
+    type: 'FETCH_TODOS_REQUEST',
+    filter
   })
+
+  return api.fetchTodos(filter).then(
+    // 成功時
+    response => {
+      dispatch({
+        type: 'FETCH_TODOS_SUCCESS',
+        filter,
+        response
+      }) // 解決されたらreceiveTodoをdispatch
+    },
+    // 失敗時
+    error => {
+      dispatch({
+        type: 'FETCH_TODOS_FAILURE',
+        filter,
+        message: error.message || 'Something went wrong.'
+      })
+    }
+  )
 }

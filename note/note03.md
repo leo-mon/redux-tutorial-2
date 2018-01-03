@@ -81,3 +81,33 @@ isFetchnigフラグはreceiveTodosが戻って来たときにresetされる
 > Trueの最中にrequestを走らせるとdoneの方に落ちる
 
 redux-thunkがこれまでインプリしてきたmiddlewareになる
+
+
+## Displaying Error Messages
+APIコールが失敗した時のことを考えthrow errorを仕込む(Promiseがrejectされる)  
+この状態だとLodingが表示され続ける、isFetchingがtrueに設定されている一方でreceiveTodosが返ってこないのでfalseに落ちないため  
+
+requestTodosはfetchTodosの外側では使われないので、内側に含めてしまう  
+同じことはreceiveTodosにも言えるので内側に 
+rejectハンドラをPromise.thenにも付ける
+
+fetchTodosはいくつかactionをdispatchするので、名前をわかりやすく変更する, errorハンドラの方にも追加
+
+Reducerもこれに対応してアップデート  
+idとisFetchingについて、それぞれcase文の対応文字列変更
+これで全てのケースを拾えるように  
+
+Errorをユーザーに見せる用のコンポーネントを作成(FetchError.js)
+> ビデオだとContainerに置いてたけど多分Presentational
+propsとしてmessageとonRetryを受け取る  
+
+これをVisibleTodosから描画、errorMessageを注入 
+errorMessage自体はVisibleTodosのPropsから受け取れるようにmapStateToPropsへマッピング（getErrorMessage） 　
+getErrorMessageはgetFetchingとほぼ同様、reducer(index.jsでcreateList.jsのものimport)に記載  
+createList内では新たにerrorMessage reducerを作成、isFetchingらとcombineReducerでつなげる  
+errorMessage自体はFailした時にaction.messageを返却、それ以外はnull
+
+最後にAPIをランダムに返すように変更
+
+promiseのerrorハンドリングだが、catchを利用する方法もある  
+こちらは内部のエラーメッセージをユーザーに見せるかたちになるので、このシナリオでは使わないことをお勧め

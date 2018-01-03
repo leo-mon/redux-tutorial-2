@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import * as actions from '../actions'
 import TodoList from '../components/TodoList'
-import { getVisibleTodos, getIsFetching } from '../reducers'
+import { getVisibleTodos, getIsFetching, getErrorMessage } from '../reducers'
+import FetchError from '../components/FetchError'
 
 class VisibleTodoList extends Component {
   componentDidMount () {
@@ -18,13 +19,23 @@ class VisibleTodoList extends Component {
 
   fetchData () {  // Fake APIから値を取得しStoreへと書き込む
     const { filter, fetchTodos } = this.props
-    fetchTodos(filter).then(() => console.log('done!'))
+    fetchTodos(filter).then(/* () => console.log('done!') */)
   }
 
   render () {
-    const { toggleTodo, todos, isFetching } = this.props
+    const { toggleTodo, todos, isFetching, errorMessage } = this.props
+    // データ取得中はこれを表示
     if (isFetching && !todos.length) {
-      return <p>Loading...</p>   // requestTodos実行時はこちらを表示
+      return <p>Loading...</p>
+    }
+    // 取得に失敗した時などのエラーが出た時はこちら表示
+    if (errorMessage && !todos.length) {
+      return (
+        <FetchError
+          message={errorMessage}
+          onRetry={() => this.fetchData()}
+        />
+      )
     }
 
     return (
@@ -41,6 +52,7 @@ const mapStateToProps = (state, { match }) => {
   return {
     todos: getVisibleTodos(state, filter),
     isFetching: getIsFetching(state, filter),
+    errorMessage: getErrorMessage(state, filter),
     filter
   }
 }

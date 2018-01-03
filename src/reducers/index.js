@@ -26,3 +26,6 @@ export const getVisibleTodos = (state, filter) => {
 // データ取得中かどうかを取得
 export const getIsFetching = (state, filter) =>
   fromList.getIsFetching(state.listByFilter[filter])
+
+export const getErrorMessage = (state, filter) =>
+  fromList.getErrorMessage(state.listByFilter[filter])
