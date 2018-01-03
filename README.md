@@ -19,10 +19,11 @@ yarn add\
 yarn add\
   react react-dom\
   redux react-redux\
-  redux-promise redux-logger\
+  redux-promise redux-logger redux-thunk\
   react-router-dom\
   node-uuid lodash
 ```
+(promiseかthunkかはどちらかでいい)
 
 ### 設定ファイル
 - `webpack.config.js`

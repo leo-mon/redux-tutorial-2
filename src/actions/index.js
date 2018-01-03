@@ -1,5 +1,6 @@
 import { v4 } from 'node-uuid'
 import * as api from '../api'
+import { getIsFetching } from '../reducers'
 
 // Action Creators
 
@@ -25,7 +26,10 @@ const receiveTodos = (filter, response) => ({
   response
 })
 
-export const fetchTodos = (filter) => (dispatch) => {  // thunkによってstore.dispatchがdispatchには渡される
+export const fetchTodos = (filter) => (dispatch, getState) => {  // thunkによってstore.dispatchがdispatchには渡される, getStateはredux-thunkが渡してくれる？
+  if (getIsFetching(getState(), filter)) {  // fetch中はこちらに落ちる
+    return Promise.resolve()  // thunkの返り値をPromiseにするため
+  }
   dispatch(requestTodos(filter))
 
   return api.fetchTodos(filter).then(response => {

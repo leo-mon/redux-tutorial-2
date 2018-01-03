@@ -1,11 +1,14 @@
 import { createStore, applyMiddleware } from 'redux'
 import createLogger from 'redux-logger'
 import todoApp from './reducers'
+import thunk from 'redux-thunk'
 
+/* redux-thunkの導入により不要に
 const thunk = (store) => (next) => (action) =>
   typeof action === 'function'  // もし関数()をdispatchしろと渡されたら
-    ? action(store.dispatch)  // store.dispatchを引数としてactionに与え、その中でdispatchを走らせる
+    ? action(store.dispatch, store.getState)  // store.dispatchを引数としてactionに与え、その中でdispatchを走らせる
     : next(action)  // そうでない場合は次のミドルウェアへ処理を渡す
+*/
 
 // Store周りの設定（初期値代入やDispatcherの登録、ローカルストレージへの保存）
 const configureStore = () => {

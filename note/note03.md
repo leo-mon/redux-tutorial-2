@@ -58,3 +58,26 @@ thunk middlewareはthunksのdispatchを補助する。他のmiddlewareと同様�
 > (これまでは{'TOGGLE_TODO', id}みたいなオブジェクトを引数として渡していたが関数で今回は渡す)
 > このためコールバック関数内で複数の処理を一括で実行可能、今回はrequestTodosとreceiveTodosが実行され、それぞれstore.dispatchに渡されて処理される
 > とりあえず先に進もう
+
+
+## Avoiding Race Conditions with Thunks
+fake APIのディレイを5秒にすると問題が発生する  
+リクエスト前にタブがすでにロードされはじめたかチェックしておらず、タブ切り替えをたくさん走らせると、たくさんのreceiveTodosが返ってくるため、潜在的に競合状態になる
+
+これを解消するために、すでに与えられたfilterに対応するtodoをfetchし始めていたら、fetchTodos action createrから早めに抜けるようにする
+
+getFetchingセレクタを利用して、すでに取得し始めているかのチェックをfetchTodosの内部で行う  
+もしtrueが返って来たら何もdispatchせずにthunkから抜ける
+
+getFetchingをreducerからimport、getStateはstoreに属するがaction creatorが直接アクセスする必要はない
+
+thunk middleware内でstore.getStateを走らせて、actionの第二引数として渡し、fetchTodosでgetStateを受け取れるようにする  
+
+これらの変更により、action creatorはactionを状況に応じてdispatchできる（最高で3つまでしか同時にfetchしに行かないようになる）
+
+isFetchnigフラグはreceiveTodosが戻って来たときにresetされる
+
+即時returnでも動作はするようだが、thunkの返り値はPromiseなので、early returnをPromiseにして、それを受け取ってやるようにする
+> Trueの最中にrequestを走らせるとdoneの方に落ちる
+
+redux-thunkがこれまでインプリしてきたmiddlewareになる
