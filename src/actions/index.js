@@ -1,14 +1,15 @@
-import { v4 } from 'node-uuid'
 import * as api from '../api'
 import { getIsFetching } from '../reducers'
 
 // Action Creators
 
-export const addTodo = (text) => ({  // acton creator, dispatchされるアクションを返す
-  type: 'ADD_TODO',
-  id: v4(),
-  text
-})
+export const addTodo = (text) => (dispatch) =>  // fetchTodosを参考にthunkにする
+  api.addTodo(text).then(response => {  // Promiseが解決したらDispatch
+    dispatch({
+      type: 'ADD_TODO_SUCCESS',
+      response
+    })
+  })
 
 export const toggleTodo = (id) => ({
   type: 'TOGGLE_TODO',

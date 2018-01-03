@@ -111,3 +111,22 @@ errorMessage自体はFailした時にaction.messageを返却、それ以外はnu
 
 promiseのerrorハンドリングだが、catchを利用する方法もある  
 こちらは内部のエラーメッセージをユーザーに見せるかたちになるので、このシナリオでは使わないことをお勧め
+
+
+## Creating Data on the Server
+Fake APIにエンドポイント追加  
+まずadd todoに相当するもの、次にtoggle todoに相当するものを作成
+
+サーバー側でidを生成するのでaction creatorにv4は要らない  
+addTodoもカリー化された引数としてdispatchを渡す 
+渡されたdispatchはADD_TODO_SUCCESSをdispatch　
+
+これに対応してreducer(byId)も変更  
+
+これでADD TODOボタンがボタンが動くようになり、byIdも要素が4つに増えていることが確認できるが、listByFilterがアップデートされないためにリストにIDは3つしかなく、画面には反映されない　
+他のタブを選んでまた戻ってくると、データの再取得が走るために見えるようになる
+
+これを解消するためにcreateListにもADD_TODO_SUCCESSに対応するreducerを記載  
+idsに追記、confirmationがサーバーから送られて来た時、新しいIDのリスト（以前のものの最後に追加されたIDが付与されたもの）を返すようにする  
+他のアクションと違い、ADD_TODO_SUCCESSはfilterプロパティをactionに持たないために`filter !== acion.filter`がfailに落ちるために、この追加では動かない  
+FETCH_TODO_SUCCESSとADD_TODO_SUCCESSでそれぞれ条件判定を変える

@@ -4,12 +4,15 @@ import { combineReducers } from 'redux'
 const createList = (filter) => {
   // idのアレイを管理
   const ids = (state = [], action) => {
-    if (action.filter !== filter) {  // 自身の管轄外のfilterの時は処理をしない
-      return state
-    }
     switch (action.type) {
       case 'FETCH_TODOS_SUCCESS':
-        return action.response.map(todo => todo.id)  // そのフィルタに対応するIDのアレイを返却
+        return filter === action.filter  // 三項演算子に判定変更
+          ? action.response.map(todo => todo.id)
+          : state
+      case 'ADD_TODO_SUCCESS':
+        return filter !== 'completed'  // completed以外のアレイに追加
+          ? [...state, action.response.id]
+          : state
       default:
         return state
     }
