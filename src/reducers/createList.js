@@ -7,11 +7,11 @@ const createList = (filter) => {
     switch (action.type) {
       case 'FETCH_TODOS_SUCCESS':
         return filter === action.filter  // 三項演算子に判定変更
-          ? action.response.map(todo => todo.id)
+          ? action.response.result
           : state
       case 'ADD_TODO_SUCCESS':
         return filter !== 'completed'  // completed以外のアレイに追加
-          ? [...state, action.response.id]
+          ? [...state, action.response.result]
           : state
       default:
         return state

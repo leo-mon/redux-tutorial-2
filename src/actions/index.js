@@ -1,3 +1,5 @@
+import { normalize } from 'normalizr'
+import * as schema from './schema'
 import * as api from '../api'
 import { getIsFetching } from '../reducers'
 
@@ -5,9 +7,15 @@ import { getIsFetching } from '../reducers'
 
 export const addTodo = (text) => (dispatch) =>  // fetchTodosを参考にthunkにする
   api.addTodo(text).then(response => {  // Promiseが解決したらDispatch
+    /*
+    console.log(
+      'normalized response',
+      normalize(response, schema.todo)
+    )
+    */
     dispatch({
       type: 'ADD_TODO_SUCCESS',
-      response
+      response: normalize(response, schema.todo)
     })
   })
 
@@ -28,10 +36,16 @@ export const fetchTodos = (filter) => (dispatch, getState) => {  // thunkによ�
   return api.fetchTodos(filter).then(
     // 成功時
     response => {
+      /*
+      console.log(
+        'normalized response',
+        normalize(response, schema.arrayOfTodos)
+      )
+      */
       dispatch({
         type: 'FETCH_TODOS_SUCCESS',
         filter,
-        response
+        response: normalize(response, schema.arrayOfTodos)
       }) // 解決されたらreceiveTodoをdispatch
     },
     // 失敗時

@@ -21,7 +21,7 @@ yarn add\
   redux react-redux\
   redux-promise redux-logger redux-thunk\
   react-router-dom\
-  node-uuid lodash
+  node-uuid lodash normalizr
 ```
 (promiseかthunkかはどちらかでいい)
 
