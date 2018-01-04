@@ -2,6 +2,17 @@ import { combineReducers } from 'redux'
 
 // 対応するフィルタ(all, active, completed)に関する状態を管理するreducerを生成
 const createList = (filter) => {
+  const handleToggle = (state, action) => {
+    const { result: toggledId, entities } = action.response
+    const { completed } = entities.todos[toggledId]
+    const shouldRemove = (
+      (completed && filter === 'active') ||
+      (!completed && filter === 'completed')
+    )
+    return shouldRemove
+    ? state.filter(id => id !== toggledId)
+    : state
+  }
   // idのアレイを管理
   const ids = (state = [], action) => {
     switch (action.type) {
@@ -13,6 +24,8 @@ const createList = (filter) => {
         return filter !== 'completed'  // completed以外のアレイに追加
           ? [...state, action.response.result]
           : state
+      case 'TOGGEL_TODO_SUCCESS':
+        return handleToggle(state, action)
       default:
         return state
     }

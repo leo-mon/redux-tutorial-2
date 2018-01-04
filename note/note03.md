@@ -221,3 +221,15 @@ responseがresultフィールドを持ち、これがidのアレイとなる（A
 
 > 記述量は減るが
 
+## Updating Data on the Server
+toggleTodoをthunk action creatorに変える  
+normalizeを利用
+
+reducerも変更  
+handleToggle()を定義  
+resultとentitiesを抜き出し、そこからcompletedの状態を取得  
+- completedがtrueだがfilterがactive  
+- completedがfalseだがfilterがcompleted  
+の時は表示からの削除対象になる
+
+trueのときはそれ以外のリストを、falseのときはそのままのアレイを返す
